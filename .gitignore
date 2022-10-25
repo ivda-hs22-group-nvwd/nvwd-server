@@ -1,4 +1,4 @@
 # Python Environment
 /env
-.txt
-.html
+*.txt
+*.html
