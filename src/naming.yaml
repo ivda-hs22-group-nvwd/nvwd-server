@@ -21,3 +21,11 @@ zodiac_hiearchy: {
   and it's fun to think about: 1,
   and it matters a lot: 2
 }
+
+# Language
+different_language_spoken: {
+  'afrikaans', 'albanian', 'ancient', 'arabic', 'armenian', 'basque', 'belarusan', 'bengali', 'breton', 'bulgarian', 'c++', 'catalan', 'cebuano', 'chechen', 'chinese', 'croatian', 'czech', 'danish', 'dutch', 'english', 'esperanto', 'estonian', 'farsi', 'finnish', 'french', 'frisian', 'georgian', 'german', 'greek', 'gujarati', 'hawaiian', 'hebrew', 'hindi', 'hungarian', 'icelandic', 'ilongo', 'indonesian', 'irish', 'italian', 'japanese', 'khmer', 'korean', 'latin', 'latvian', 'lisp', 'lithuanian', 'malay', 'maori', 'mongolian', 'norwegian', 'occitan', 'other', 'persian', 'polish', 'portuguese', 'romanian', 'rotuman', 'russian', 'sanskrit', 'sardinian', 'serbian', 'sign', 'slovak', 'slovenian', 'spanish', 'swahili', 'swedish', 'tagalog', 'tamil', 'thai', 'tibetan', 'turkish', 'ukrainian', 'urdu', 'vietnamese', 'welsh', 'yiddish'
+}
+language_level: {
+
+}
