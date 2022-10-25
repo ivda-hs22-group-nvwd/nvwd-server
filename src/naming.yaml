@@ -1,18 +1,24 @@
 ---
 # ZODIAC
-{
-  "zodiac_signs": [
-    {"sign": "Aries", "start": "March 21", "end": "April 19"},
-    {"sign": "Taurus", "start": "April 20", "end": "May 20"},
-    {"sign": "Gemini", "start": "May 21", "end": "Juny 20"},
-    {"sign": "Cancer", "start": "June 21", "end": "July 22"},
-    {"sign": "Leo", "start": "July 23", "end": "August 22"},
-    {"sign": "Virgo", "start": "August 23", "end": "September 22"},
-    {"sign": "Libra", "start": "September 23", "end": "October 22"},
-    {"sign": "Scorpio", "start": "October 23", "end": "November 21"},
-    {"sign": "Sagittarius", "start": "November 22", "end": "December 21"},
-    {"sign": "Capricorn", "start": "December 22", "end": "January 19"},
-    {"sign": "Aquarius", "start": "January 20", "end": "February 18"},
-    {"sign": "Pisces", "start": "February 19", "end": "March 20"},
-  ]
+
+zodiac_signs: {
+  Aries: {"start": "March 21", "end": "April 19"},
+  Taurus: {"start": "April 20", "end": "May 20"},
+  Gemini: {"start": "May 21", "end": "Juny 20"},
+  Cancer: {"start": "June 21", "end": "July 22"},
+  Leo: {"start": "July 23", "end": "August 22"},
+  Virgo: {"start": "August 23", "end": "September 22"},
+  Libra: {"start": "September 23", "end": "October 22"},
+  Scorpio: {"start": "October 23", "end": "November 21"},
+  Sagittarius: {"start": "November 22", "end": "December 21"},
+  Capricorn: {"start": "December 22", "end": "January 19"},
+  Aquarius: {"start": "January 20", "end": "February 18"},
+  Pisces: {"start": "February 19", "end": "March 20"}
 }
+
+zodiac_hiearchy: [
+  empty: {"value": "-1"},
+  doesn't matter": {"value": "0"},
+  it's fun to think about: {"value": "1"},
+  it matters a lot: {"value": "2"}
+]
