@@ -16,9 +16,8 @@ zodiac_signs: {
   Pisces: {"start": "February 19", "end": "March 20"}
 }
 
-zodiac_hiearchy: [
-  empty: {"value": "-1"},
-  doesn't matter": {"value": "0"},
-  it's fun to think about: {"value": "1"},
-  it matters a lot: {"value": "2"}
-]
+zodiac_hiearchy: {
+  but it doesn't matter: 0,
+  and it's fun to think about: 1,
+  and it matters a lot: 2
+}
