@@ -45,3 +45,10 @@ body_type: {
   used up: -1,
   rather not say: 0
 }
+
+# DRUGS
+drugs: {
+  never: 1,
+  sometimes: -1,
+  often: -2
+}
