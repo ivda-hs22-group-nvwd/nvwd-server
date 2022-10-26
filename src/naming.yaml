@@ -52,3 +52,13 @@ drugs: {
   sometimes: -1,
   often: -2
 }
+
+# DRINKS
+drinks: {
+  not at all: 1,
+  rarely: 0,
+  socially: 0,
+  often: 0,
+  very often: -1,
+  desperately: -2
+}
