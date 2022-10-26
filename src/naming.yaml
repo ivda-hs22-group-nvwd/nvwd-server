@@ -29,3 +29,19 @@ different_language_spoken: {
 language_level: {
 
 }
+
+# BODY TYPE
+body_type: {
+  overweight: -1,
+  full figured: 0,
+  curvy: 0,
+  a little extra: 0,
+  jacked: 1,
+  athletic: 1,
+  fit: 1,
+  average: 1,
+  skinny: 1,
+  thin: 0,
+  used up: -1,
+  rather not say: 0
+}
