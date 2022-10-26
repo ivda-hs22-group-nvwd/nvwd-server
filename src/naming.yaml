@@ -62,3 +62,15 @@ drinks: {
   very often: -1,
   desperately: -2
 }
+
+# SMOKES
+smokes: {
+    'col': 'smokes',
+    'mapping': {
+      'no': 0,
+      sometimes: 1,
+      trying to quit: 2,
+      when drinking: 3,
+      'yes': 4
+    }
+}
