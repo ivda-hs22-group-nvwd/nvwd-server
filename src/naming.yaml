@@ -16,7 +16,7 @@ zodiac_signs: {
   Pisces: {"start": "February 19", "end": "March 20"}
 }
 
-zodiac_hiearchy: {
+zodiac_hierarchy: {
   but it doesn't matter: 0,
   and it's fun to think about: 1,
   and it matters a lot: 2
@@ -73,4 +73,22 @@ smokes: {
       when drinking: 3,
       'yes': 4
     }
+}
+
+
+# EDUCATION
+education_institution: [
+  college/university, two-year college, masters program, ph.d program,
+  high school, law school, med school,
+  space camp
+]
+
+education_status: [
+  dropped out of, working on, graduated from
+]
+
+education_status_hierarchy: {
+  dropped out of: -1,
+  working on: 0,
+  graduated from: 1
 }
