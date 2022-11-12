@@ -1,0 +1,21 @@
+# Feature List
+
+- [x] age
+- [x] body_type
+- [x] diet
+- [x] drinks
+- [x] drugs
+- [x] education
+- [ ] ethnicity
+- [x] height
+- [x] income
+- [x] job
+- [ ] offspring
+- [ ] orientation
+- [ ] pets
+- [ ] religion
+- [x] sex
+- [x] sign
+- [x] smokes
+- [ ] speaks
+- [x] status
