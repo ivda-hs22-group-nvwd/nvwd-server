@@ -13,7 +13,7 @@
 - [x] offspring
 - [x] orientation
 - [x] pets
-- [ ] religion
+- [x] religion
 - [x] sex
 - [x] sign
 - [x] smokes
