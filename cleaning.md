@@ -6,7 +6,7 @@
 - [x] drinks
 - [x] drugs
 - [x] education
-- [ ] ethnicity
+- [x] ethnicity
 - [x] height
 - [x] income
 - [x] job
