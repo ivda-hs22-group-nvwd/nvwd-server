@@ -10,7 +10,7 @@
 - [x] height
 - [x] income
 - [x] job
-- [ ] offspring
+- [x] offspring
 - [ ] orientation
 - [ ] pets
 - [ ] religion
