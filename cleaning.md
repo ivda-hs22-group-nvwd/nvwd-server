@@ -11,7 +11,7 @@
 - [x] income
 - [x] job
 - [x] offspring
-- [ ] orientation
+- [x] orientation
 - [ ] pets
 - [ ] religion
 - [x] sex
