@@ -12,7 +12,7 @@
 - [x] job
 - [x] offspring
 - [x] orientation
-- [ ] pets
+- [x] pets
 - [ ] religion
 - [x] sex
 - [x] sign
