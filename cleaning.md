@@ -17,5 +17,5 @@
 - [x] sex
 - [x] sign
 - [x] smokes
-- [ ] speaks
+- [x] speaks
 - [x] status
