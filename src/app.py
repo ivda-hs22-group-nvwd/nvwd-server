@@ -2,7 +2,7 @@ import sqlite3
 import json
 from flask import Flask, render_template
 
-# Start with "flask run"
+# Start with "flask --debug run"
 
 ### INIT
 app = Flask(__name__)

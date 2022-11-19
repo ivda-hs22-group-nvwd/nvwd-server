@@ -1,5 +1,4 @@
 # Python Environment
 /env
 *.txt
-*.html
 src/__pycache__/app.cpython-38.pyc
