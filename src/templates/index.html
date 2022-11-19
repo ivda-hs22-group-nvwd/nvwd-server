@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Posts {% endblock %}</h1>
+    {% for person in persons %}
+        <div class='person'>
+            <p>{{ person['index'] }}</p>
+            <h2>{{ person['age'] }}</h2>
+            <p>{{ person['body_type'] }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
