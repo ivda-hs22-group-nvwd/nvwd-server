@@ -2,3 +2,5 @@
 /env
 *.txt
 src/__pycache__/app.cpython-38.pyc
+src/plots/*.pdf
+src/plots/*.png
