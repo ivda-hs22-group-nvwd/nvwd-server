@@ -239,21 +239,20 @@ def preprocess(columns, df):
         df = std_scaler(df, ['height'])
 
 
-    if '' in columns:
+    if 'income' in columns:
         ###  ###
 
         # Replace -1 entries
-        df[''] = df[''].apply(lambda y: np.nan if y==-1 else y) # replace -1 with nan
-        # Todo: Maybe insert non nan but average  (only 5k values after that)
+        df['income'] = df['income'].apply(lambda y: np.nan if y==-1 else y) # replace -1 with nan
 
         # Remove nan's
-        df.dropna(inplace=True, subset=[''])
+        df.dropna(inplace=True, subset=['income'])
 
-        # Scale
-        df = std_scaler(df, [''])
-        #df
-
-        df = df.drop('', axis=1)
+        # Encode drugs modifier
+        income_encoder = LabelEncoder()
+        income_encoder.fit(df['income'])
+        encoded_col_income = income_encoder.transform(df['income'])
+        df['income'] = encoded_col_income
 
 
     if 'job' in columns:
