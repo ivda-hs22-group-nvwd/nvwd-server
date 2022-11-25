@@ -48,6 +48,8 @@ def preprocess(columns, df):
 
         # Remove nan's
         df.dropna(inplace=True, subset=['age'])
+        
+        df.drop(df[df['age'] >= 105].index, inplace = True)
 
         # Scale
         df = std_scaler(df, ['age'])
