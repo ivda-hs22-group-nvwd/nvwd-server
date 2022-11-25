@@ -2,12 +2,12 @@ import sqlite3
 import json
 from flask import Flask, render_template
 
-# Start with "flask --debug run"
+# Start with 'flask --debug run'
 
 ### INIT
 app = Flask(__name__)
 def get_db_connection():
-    conn = sqlite3.connect('okcupid.db')
+    conn = sqlite3.connect('okcupid.sqlite')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -22,20 +22,50 @@ def template():
     return render_template('index.html', persons=persons)
 
 
-@app.route('/index')
-def index():
-    with sqlite3.connect('okcupid.db') as conn:
+## CLEAN
+@app.route('/api/clean/index')
+def clean_index():
+    with sqlite3.connect('okcupid.sqlite') as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM okcupid")
+        cursor.execute('SELECT * FROM okcupid_clean')
         data = cursor.fetchall()
         return json.dumps(data)
 
-# data is normalized!
-# Todo: Insert non-normalized data
-@app.route('/age/between/<float:start>/<float:end>')
-def agebetween(start, end):
-    with sqlite3.connect('okcupid.db') as conn:
+@app.route('/api/clean/<int:id>')
+def clean_row(id):
+    with sqlite3.connect('okcupid.sqlite') as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM okcupid WHERE age > ? and age < ?", [start, end])
+        cursor.execute('SELECT * FROM okcupid_clean WHERE rowid = ?', [id])
         data = cursor.fetchall()
         return json.dumps(data)
+
+## STANDARDIZED
+@app.route('/api/std/index')
+def std_index():
+    with sqlite3.connect('okcupid.sqlite') as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM okcupid_std')
+        data = cursor.fetchall()
+        return json.dumps(data)
+
+@app.route('/api/std/<int:id>')
+def std_row(id):
+    with sqlite3.connect('okcupid.sqlite') as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM okcupid_std WHERE rowid = ?', [id])
+        data = cursor.fetchall()
+        return json.dumps(data)
+
+## BOTH
+@app.route('/api/<int:id>')
+def row(id):
+    with sqlite3.connect('okcupid.sqlite') as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM okcupid_clean WHERE rowid = ?', [id])
+        clean = cursor.fetchall()
+        
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM okcupid_std WHERE rowid = ?', [id])
+        std = cursor.fetchall()
+        
+        return json.dumps(clean+std)
