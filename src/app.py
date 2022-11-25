@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 # Start with 'flask --debug run'
 
@@ -38,6 +38,18 @@ def clean_row(id):
         cursor.execute('SELECT * FROM okcupid_clean WHERE rowid = ?', [id])
         data = cursor.fetchall()
         return json.dumps(data)
+
+@app.route('/api/clean/age/between/',methods = ['POST'])
+def alean_age_between():
+    if request.method == 'POST':
+        age_from = request.form['age_from']
+        age_to = request.form['age_to']
+    
+        with sqlite3.connect('okcupid.sqlite') as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM okcupid_clean WHERE age BETWEEN ? and ?', [age_from, age_to])
+            data = cursor.fetchall()
+            return json.dumps(data)
 
 ## STANDARDIZED
 @app.route('/api/std/index')
