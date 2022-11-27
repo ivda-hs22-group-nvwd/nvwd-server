@@ -1,8 +1,8 @@
 import sqlite3
 import json
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, Response
 
-### QUICK TEST WILL BE REFACTORED
+### INIT TODO:Refactor
 import pandas as pd
 import numpy as np
 from sklearn_pandas import DataFrameMapper
@@ -10,34 +10,39 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.preprocessing import LabelEncoder
 
-continuous_cols = ['age', 'height']
-categorical_cols = ['body_type', 'drinks', 'drugs', 'income', 'job', 'orientation', 'sex', 'smokes',
-'diet','diet_modifier',
-'education_status', 'education_institution',
-'offspring_status', 'offspring_future',
-'pets_cats', 'pets_dogs',
-'religion_type', 'religion_modifier',
-'sign', 'sign_modifier']
-ethnities_cols = ['ethnicities_middle_eastern', 'ethnicities_hispanic_/_latin',
-       'ethnicities_white', 'ethnicities_indian', 'ethnicities_other',
-       'ethnicities_asian', 'ethnicities_black', 'ethnicities_native_american',
-       'ethnicities_pacific_islander']
-speaks_cols = ['speaks_english', 'speaks_spanish', 'speaks_french', 'speaks_c++',
-       'speaks_chinese', 'speaks_tagalog', 'speaks_portuguese',
-       'speaks_japanese', 'speaks_russian', 'speaks_ukrainian',
-       'speaks_sanskrit', 'speaks_thai', 'speaks_hindi', 'speaks_sign',
-       'speaks_swedish', 'speaks_german', 'speaks_italian', 'speaks_arabic',
-       'speaks_latin', 'speaks_other', 'speaks_hebrew', 'speaks_hawaiian',
-       'speaks_korean', 'speaks_ancient', 'speaks_vietnamese',
-       'speaks_indonesian', 'speaks_latvian', 'speaks_hungarian',
-       'speaks_lisp', 'speaks_swahili', 'speaks_rotuman', 'speaks_czech',
-       'speaks_yiddish', 'speaks_greek', 'speaks_catalan', 'speaks_croatian',
-       'speaks_farsi', 'speaks_icelandic', 'speaks_tamil', 'speaks_serbian',
-       'speaks_esperanto', 'speaks_norwegian', 'speaks_bengali',
-       'speaks_dutch', 'speaks_urdu', 'speaks_irish', 'speaks_welsh',
-       'speaks_sign_language', 'speaks_khmer', 'speaks_cebuano',
-       'speaks_afrikaans', 'speaks_albanian', 'speaks_romanian',
-       'speaks_polish', 'speaks_turkish', 'speaks_finnish']
+continuous_cols = [
+        'age',
+        'height']
+categorical_cols = [
+        'body_type', 'drinks', 'drugs', 'income', 'job', 'orientation', 'sex', 'smokes',
+        'diet','diet_modifier',
+        'education_status', 'education_institution',
+        'offspring_status', 'offspring_future',
+        'pets_cats', 'pets_dogs',
+        'religion_type', 'religion_modifier',
+        'sign', 'sign_modifier']
+ethnities_cols = [
+        'ethnicities_middle_eastern', 'ethnicities_hispanic_/_latin',
+        'ethnicities_white', 'ethnicities_indian', 'ethnicities_other',
+        'ethnicities_asian', 'ethnicities_black', 'ethnicities_native_american',
+        'ethnicities_pacific_islander']
+speaks_cols = [
+        'speaks_english', 'speaks_spanish', 'speaks_french', 'speaks_c++',
+        'speaks_chinese', 'speaks_tagalog', 'speaks_portuguese',
+        'speaks_japanese', 'speaks_russian', 'speaks_ukrainian',
+        'speaks_sanskrit', 'speaks_thai', 'speaks_hindi', 'speaks_sign',
+        'speaks_swedish', 'speaks_german', 'speaks_italian', 'speaks_arabic',
+        'speaks_latin', 'speaks_other', 'speaks_hebrew', 'speaks_hawaiian',
+        'speaks_korean', 'speaks_ancient', 'speaks_vietnamese',
+        'speaks_indonesian', 'speaks_latvian', 'speaks_hungarian',
+        'speaks_lisp', 'speaks_swahili', 'speaks_rotuman', 'speaks_czech',
+        'speaks_yiddish', 'speaks_greek', 'speaks_catalan', 'speaks_croatian',
+        'speaks_farsi', 'speaks_icelandic', 'speaks_tamil', 'speaks_serbian',
+        'speaks_esperanto', 'speaks_norwegian', 'speaks_bengali',
+        'speaks_dutch', 'speaks_urdu', 'speaks_irish', 'speaks_welsh',
+        'speaks_sign_language', 'speaks_khmer', 'speaks_cebuano',
+        'speaks_afrikaans', 'speaks_albanian', 'speaks_romanian',
+        'speaks_polish', 'speaks_turkish', 'speaks_finnish']
 mapper = DataFrameMapper(
   [([continuous_col], StandardScaler()) for continuous_col in continuous_cols] +
   [(categorical_col, LabelEncoder()) for categorical_col in categorical_cols] +
@@ -146,3 +151,56 @@ def user_input():
         result_std = sample_std.to_json(orient="split") 
         parsed_std = json.loads(result_std)
         return json.dumps(parsed_std) # TODO: print both
+    
+    
+@app.route('/api/dev/list',methods = ['POST'])
+def get_by_indices():
+    if request.method == 'POST':
+        data = request.json
+        ids = tuple(data['ids'])
+        response_dict = {}
+        with sqlite3.connect('okcupid.sqlite') as conn:
+            cursor = conn.cursor()
+            # https://stackoverflow.com/questions/9522971/is-it-possible-to-use-index-as-a-column-name-in-sqlite
+            # TODO: Fix [index] (rename)
+            cursor.execute(f'SELECT * FROM okcupid_std WHERE [index] in {format(ids)}')
+            std = cursor.fetchall()
+            response_dict['std'] = std
+            
+            cursor.execute(f'SELECT * FROM okcupid_clean WHERE [index] in {format(ids)}')
+            clean = cursor.fetchall()
+            response_dict['clean'] = clean
+            
+            
+            # Get col names
+            names = [description[0] for description in cursor.description]
+
+            
+            r = []
+            for index, (clean_id, std_id) in enumerate(zip(clean, std)):
+                clean = dict(zip(names, clean_id))
+                std = dict(zip(names, std_id))
+                d = {'clean':clean, 'std':std}        
+                r.append(d)
+            
+        conn.close()
+        response = json.dumps(r)
+        return response
+    
+
+@app.route('/api/dev/std',methods = ['POST'])
+def get_standarization():
+    if request.method == 'POST':
+        data = request.json
+        sample = pd.DataFrame.from_records(data=[data])
+        std = np.round(mapper.transform(sample), 2)
+        return Response(std.to_json(orient="records"), mimetype='application/json')
+    
+    
+@app.route('/api/dev/std/template', methods=("POST", "GET"))
+def html_table():
+    if request.method == 'POST':
+        data = request.json
+        sample = pd.DataFrame.from_records(data=[data])
+        std = np.round(mapper.transform(sample), 2)
+        return render_template('table.html',  tables=[std.to_html(classes='data')], titles=std.columns.values)

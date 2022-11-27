@@ -37,8 +37,8 @@ def minmax_scaler(df, col_names):
 
 def preprocess(columns, df):
     MAX_AGE = 105
-    MISSING_DIET_MODIFIER = 'No specified diet modifier'
-    MISSING_SIGN_MODIFIER = 'No specified sign modifier'
+    MISSING_DIET_MODIFIER = 'no specified diet modifier'
+    MISSING_SIGN_MODIFIER = 'no specified sign modifier'
     
     #for column in df:
      #   if column in columns:
@@ -571,10 +571,9 @@ def preprocess(columns, df):
 
         # Extract sign modifier
         df['sign_modifier'] = df['sign'].str.split(' ').str[1:]
-        df['sign_modifier'] = df['sign_modifier'].apply(lambda y: MISSING_SIGN_MODIFIER if len(y)==0 else y) # replace empty lists with MISSING_SIGN_MODIFIER
         df['sign_modifier'] = df['sign_modifier'].apply(lambda y: ' '.join(y) if len(y)!=0 else y) # join list of strings together
+        df['sign_modifier'] = df['sign_modifier'].apply(lambda y: MISSING_SIGN_MODIFIER if len(y)==0 else y) # replace empty lists with MISSING_SIGN_MODIFIER
         df['sign_modifier'] = df['sign_modifier'].str.replace(ZODIAC_STRING_REPLACMENT,'\'')  # replace 
-        
 
         # Extract only sign
         df['sign'] = df['sign'].str.split(' ').str[0]
@@ -708,6 +707,15 @@ def preprocess(columns, df):
         encoded_col_status = status_encoder.transform(df['status'])
         df['status'] = encoded_col_status
         """
+    
+    
+    # Trim whitespaces
+    # Experimental
+    NUMERICAL_ROWS = ['age', 'height', 'income', 'education_status']
+    for col in df.columns:
+        if col not in NUMERICAL_ROWS:
+            df[col] = df[col].apply(lambda x: x.strip() if x is not None and type(x) is not int and type(x) is not float else x)
+    
     
     return df
 
