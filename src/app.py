@@ -9,6 +9,9 @@ from sklearn_pandas import DataFrameMapper
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 
 continuous_cols = [
         'age',
@@ -194,8 +197,58 @@ def get_standarization():
         data = request.json
         sample = pd.DataFrame.from_records(data=[data])
         std = np.round(mapper.transform(sample), 2)
-        return Response(std.to_json(orient="records"), mimetype='application/json')
-    
+        #return Response(std.to_json(orient="records"), mimetype='application/json')
+        
+        global df_clean
+        #print(df_clean)
+        
+        global df_std
+        #print(df_std)
+        #print(std)
+        
+        df_std = df_std.append(std) # add new input as last row
+        lables = cosine_similarity(df_std)[-1] # calucalte cosine similarty and extract last row
+        
+        # Generate lables
+        SIMILARITY_THRESHOLD = 0.8
+        #lables = ['not similar' if x < SIMILARITY_THRESHOLD else "similar" for x in lables]
+        lables = [0 if x < SIMILARITY_THRESHOLD else 1 for x in lables]
+        df_std['lables'] = lables
+        
+        df = df_std.copy()
+        print(df)
+        
+        # PCA
+        PCA_COMPONENTS = 4
+        pca = PCA(n_components=PCA_COMPONENTS)
+        pca.fit(df)
+        scores_pca = pca.transform(df)
+        
+        
+        # KMEANS
+        OPTIMAL_N_CLUSTER = 4
+        kmeans_pca = KMeans(n_clusters=OPTIMAL_N_CLUSTER, init='k-means++', random_state=420)
+        kmeans_pca.fit(scores_pca)
+        
+        df_segm_pca_kmeans = pd.concat([df.reset_index(drop=True), pd.DataFrame(scores_pca)], axis=1)
+        df_segm_pca_kmeans.columns.values[-PCA_COMPONENTS:] = ['PComp 1', 'PComp 2', 'PComp 3', 'PComp 4']
+
+        df_segm_pca_kmeans['Segment K-means PCA'] = kmeans_pca.labels_
+        
+        df_segm_pca_kmeans['Segment'] = df_segm_pca_kmeans['Segment K-means PCA'].map({
+            0: 'first',
+            1: 'second',
+            2: 'third',
+            3: 'fourth'
+        })
+        
+        # DEBUG
+        #return render_template('table.html',  tables=[df_segm_pca_kmeans.to_html(classes='data')], titles=df_segm_pca_kmeans.columns.values)
+        
+        # WORKS but maybe better method
+        #return json.loads(json.dumps(list(df_segm_pca_kmeans.T.to_dict().values())))
+        
+        return json.dumps(df_segm_pca_kmeans.to_dict(orient='records'), indent=2)
     
 @app.route('/api/dev/std/template', methods=("POST", "GET"))
 def html_table():
