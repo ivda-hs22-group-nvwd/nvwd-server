@@ -156,6 +156,8 @@ def preprocess(columns, df):
                 return 'med school'
             if 'space camp' in x:
                 return 'space camp'
+            if 'college' in x: # double check
+                return 'college'
 
         # Extract only education status
         def education_status_mapper(x):
