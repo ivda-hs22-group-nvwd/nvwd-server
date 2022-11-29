@@ -1,6 +1,7 @@
 import sqlite3
 import json
 from flask import Flask, render_template, request, jsonify, Response
+from flask_cors import CORS, cross_origin
 
 ### INIT TODO:Refactor
 import pandas as pd
@@ -63,6 +64,8 @@ df_std = np.round(mapper.fit_transform(df_clean.copy()),2)
 
 ### INIT
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 def get_db_connection():
     conn = sqlite3.connect('okcupid.sqlite')
     conn.row_factory = sqlite3.Row
@@ -261,6 +264,7 @@ def html_table():
     
     
 @app.route('/api/dev/std/db',methods = ['POST'])
+@cross_origin()
 def db_user():
     if request.method == 'POST':
         # USER DATA
