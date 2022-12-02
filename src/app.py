@@ -357,3 +357,6 @@ def db_user():
         #return json.loads(json.dumps(list(df_segm_pca_kmeans.T.to_dict().values())))
         
         return json.dumps(df_clean.to_dict(orient='records'), indent=2)
+
+if __name__ == "__main__":
+    app.run()
