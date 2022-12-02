@@ -267,7 +267,67 @@ def db_user():
     if request.method == 'POST':
         # USER DATA
         data = request.json
+        ethnicitiesColums = {
+            'ethnicities_indian': 0,
+            'ethnicities_native_american': 0,
+            'ethnicities_middle_eastern': 0,
+            'ethnicities_asian': 0,
+            'ethnicities_white': 0,
+            'ethnicities_black': 0,
+            'ethnicities_other': 0,
+            'ethnicities_pacific_islander': 0,
+            'ethnicities_hispanic_/_latin': 0,
+        }
+
+        ethnicitiesMapper = {
+            'indian': 'ethnicities_indian',
+            'native american': 'ethnicities_native_american',
+            'middle eastern': 'ethnicities_middle_eastern',
+            'asian': 'ethnicities_asian',
+            'white': 'ethnicities_white',
+            'black': 'ethnicities_black',
+            'other': 'ethnicities_other',
+            'pacific islander': 'ethnicities_pacific_islander',
+            'hispanic / latin': 'ethnicities_hispanic_/_latin',
+        }
+
+        for ethicity in data['ethnicities']:
+            ethnicitiesColums[ethnicitiesMapper[ethicity]] = 1
+
+        speaksColums = {
+            'speaks_english': 0,
+            'speaks_spanish': 0,
+            'speaks_french': 0,
+            'speaks_c++': 0,
+            'speaks_chinese': 0,
+            'speaks_japanese': 0,
+            'speaks_german': 0,
+            'speaks_italian': 0,
+        }
+
+        speaksMapper = {
+            'english': 'speaks_english',
+            'spanish': 'speaks_spanish',
+            'french': 'speaks_french',
+            'c++': 'speaks_c++',
+            'chinese': 'speaks_chinese',
+            'japanese': 'speaks_japanese',
+            'german': 'speaks_german',
+            'italian': 'speaks_italian'
+        }
+        for language in data['speaks']:
+            if language == "english, but in canadian":
+                language = "english"
+            speaksColums[speaksMapper[language]] = 1
+
+        for key, value in ethnicitiesColums.items():
+            data[key] = value
+        for key, value in speaksColums.items():
+            data[key] = value
+        data.pop('speaks')
+        data.pop('ethnicities')
         sample = pd.DataFrame.from_records(data=[data])
+
 
         # DB DATA
         with sqlite3.connect('okcupid.sqlite') as conn:
@@ -355,3 +415,6 @@ def db_user():
         # return json.loads(json.dumps(list(df_segm_pca_kmeans.T.to_dict().values())))
 
         return json.dumps(df_clean.to_dict(orient='records'), indent=2)
+
+if __name__ =="__main__":
+    app.run()
