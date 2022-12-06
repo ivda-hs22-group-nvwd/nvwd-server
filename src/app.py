@@ -422,8 +422,8 @@ def unsimilar():
     if request.method == 'POST':
         # USER DATA
         data = request.json
-
-        sample = pd.DataFrame.from_records(data=[data])
+        threshold = data['threshold']
+        sample = pd.DataFrame.from_records(data=[data['data']])
 
         # DB DATA
         with sqlite3.connect('okcupid.sqlite') as conn:
@@ -465,7 +465,7 @@ def unsimilar():
         lables = list(map(lambda x: 1-x, lables))  # calculate anti-similarity
 
         # Generate lables
-        SIMILARITY_THRESHOLD = 0.8
+        SIMILARITY_THRESHOLD = threshold
         #lables = ['not similar' if x < SIMILARITY_THRESHOLD else "similar" for x in lables]
         lables = [0 if x < SIMILARITY_THRESHOLD else 1 for x in lables]
         df_std['lables'] = lables
