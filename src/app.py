@@ -509,19 +509,9 @@ def unsimilar():
         # return render_template('table.html',  tables=[df_segm_pca_kmeans.to_html(classes='data')], titles=df_segm_pca_kmeans.columns.values)
 
         # WORKS but maybe better method
-<<<<<<< HEAD
-        # return json.loads(json.dumps(list(df_segm_pca_kmeans.T.to_dict().values())))
-
-        return json.dumps(df_clean.to_dict(orient='records'), indent=2)
-
-
-if __name__ == "__main__":
-    app.run()
-=======
         #return json.loads(json.dumps(list(df_segm_pca_kmeans.T.to_dict().values())))
         
         return json.dumps(df_clean.to_dict(orient='records'), indent=2)
 
 if __name__ == "__main__":
     app.run()
->>>>>>> dev
