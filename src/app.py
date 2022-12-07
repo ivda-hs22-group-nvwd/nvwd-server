@@ -54,6 +54,8 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+user_sample = {}
+user_sample_std = {}
 
 def get_db_connection():
     conn = sqlite3.connect('okcupid.sqlite')
@@ -187,6 +189,46 @@ def get_by_indices():
         conn.close()
         response = json.dumps(r)
         return response
+
+@app.route('/api/dev/userInput', methods=['GET'])
+def get_userInput():
+    print(request.args)
+    return json.dumps(user_sample)
+
+# get a user by his index (used for a direct comparison)
+@app.route('/api/dev/list', methods=['GET'])
+def get_by_index():
+    print(request.args)
+    if request.method == 'GET':
+        #id = request.args.get("id")
+        response_dict = {}
+        with sqlite3.connect('okcupid.sqlite') as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                f'SELECT * FROM okcupid_std')
+            std = cursor.fetchall()
+            # Get col names
+            names = [description[0] for description in cursor.description]
+
+            cursor.execute(
+                f'SELECT age, height FROM okcupid_clean')
+            clean_values = cursor.fetchall()
+
+            r = []
+            for row,  s in enumerate(std): #std = (20, 0.2, 0.2, 0.3, 0.13, 1, 41, 4,4,4,4,21......)
+                response_dict = {}
+                for column, value in enumerate(s):
+                    print(column)
+                    print(s)
+                    response_dict[names[column]] = value
+                response_dict['age'] = clean_values[row][0]
+                response_dict['height'] = clean_values[row][1]
+                r.append(response_dict)
+
+        conn.close()
+        response = json.dumps(r)
+        return response
+
 
 
 @app.route('/api/dev/std', methods=['POST'])
