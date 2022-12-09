@@ -469,7 +469,70 @@ def unsimilar():
         # USER DATA
         data = request.json
         threshold = data['threshold']
-        sample = pd.DataFrame.from_records(data=[data['data']])
+
+        localData = data['data']
+
+        ethnicitiesColums = {
+            'ethnicities_indian': 0,
+            'ethnicities_native_american': 0,
+            'ethnicities_middle_eastern': 0,
+            'ethnicities_asian': 0,
+            'ethnicities_white': 0,
+            'ethnicities_black': 0,
+            'ethnicities_other': 0,
+            'ethnicities_pacific_islander': 0,
+            'ethnicities_hispanic_/_latin': 0,
+        }
+
+        ethnicitiesMapper = {
+            'indian': 'ethnicities_indian',
+            'native american': 'ethnicities_native_american',
+            'middle eastern': 'ethnicities_middle_eastern',
+            'asian': 'ethnicities_asian',
+            'white': 'ethnicities_white',
+            'black': 'ethnicities_black',
+            'other': 'ethnicities_other',
+            'pacific islander': 'ethnicities_pacific_islander',
+            'hispanic / latin': 'ethnicities_hispanic_/_latin',
+        }
+
+        for ethicity in localData['ethnicities']:
+            ethnicitiesColums[ethnicitiesMapper[ethicity]] = 1
+
+        speaksColums = {
+            'speaks_english': 0,
+            'speaks_spanish': 0,
+            'speaks_french': 0,
+            'speaks_c++': 0,
+            'speaks_chinese': 0,
+            'speaks_japanese': 0,
+            'speaks_german': 0,
+            'speaks_italian': 0,
+        }
+
+        speaksMapper = {
+            'english': 'speaks_english',
+            'spanish': 'speaks_spanish',
+            'french': 'speaks_french',
+            'c++': 'speaks_c++',
+            'chinese': 'speaks_chinese',
+            'japanese': 'speaks_japanese',
+            'german': 'speaks_german',
+            'italian': 'speaks_italian'
+        }
+        for language in localData['speaks']:
+            if language == "english, but in canadian":
+                language = "english"
+            speaksColums[speaksMapper[language]] = 1
+
+        for key, value in ethnicitiesColums.items():
+            localData[key] = value
+        for key, value in speaksColums.items():
+            localData[key] = value
+        localData.pop('speaks')
+        localData.pop('ethnicities')
+        sample = pd.DataFrame.from_records(data=[localData])
+
 
         # DB DATA
         with sqlite3.connect('okcupid.sqlite') as conn:
@@ -568,7 +631,69 @@ def post_non_std():
         data = request.json
         threshold = data['threshold']  # int: degree of (anti)-similarity
         mode = data['mode']  # 1: similarity, 0: anti-similarity
-        sample = pd.DataFrame.from_records(data=[data['data']])  # userdata
+
+        localData = data['data']
+
+        ethnicitiesColums = {
+            'ethnicities_indian': 0,
+            'ethnicities_native_american': 0,
+            'ethnicities_middle_eastern': 0,
+            'ethnicities_asian': 0,
+            'ethnicities_white': 0,
+            'ethnicities_black': 0,
+            'ethnicities_other': 0,
+            'ethnicities_pacific_islander': 0,
+            'ethnicities_hispanic_/_latin': 0,
+        }
+
+        ethnicitiesMapper = {
+            'indian': 'ethnicities_indian',
+            'native american': 'ethnicities_native_american',
+            'middle eastern': 'ethnicities_middle_eastern',
+            'asian': 'ethnicities_asian',
+            'white': 'ethnicities_white',
+            'black': 'ethnicities_black',
+            'other': 'ethnicities_other',
+            'pacific islander': 'ethnicities_pacific_islander',
+            'hispanic / latin': 'ethnicities_hispanic_/_latin',
+        }
+
+        for ethicity in localData['ethnicities']:
+            ethnicitiesColums[ethnicitiesMapper[ethicity]] = 1
+
+        speaksColums = {
+            'speaks_english': 0,
+            'speaks_spanish': 0,
+            'speaks_french': 0,
+            'speaks_c++': 0,
+            'speaks_chinese': 0,
+            'speaks_japanese': 0,
+            'speaks_german': 0,
+            'speaks_italian': 0,
+        }
+
+        speaksMapper = {
+            'english': 'speaks_english',
+            'spanish': 'speaks_spanish',
+            'french': 'speaks_french',
+            'c++': 'speaks_c++',
+            'chinese': 'speaks_chinese',
+            'japanese': 'speaks_japanese',
+            'german': 'speaks_german',
+            'italian': 'speaks_italian'
+        }
+        for language in localData['speaks']:
+            if language == "english, but in canadian":
+                language = "english"
+            speaksColums[speaksMapper[language]] = 1
+
+        for key, value in ethnicitiesColums.items():
+            localData[key] = value
+        for key, value in speaksColums.items():
+            localData[key] = value
+        localData.pop('speaks')
+        localData.pop('ethnicities')
+        sample = pd.DataFrame.from_records(data=[localData])
 
         # DB DATA
         with sqlite3.connect('okcupid.sqlite') as conn:
@@ -674,7 +799,68 @@ def post_std():
         data = request.json
         threshold = data['threshold']  # int: degree of (anti)-similarity
         mode = data['mode']  # 1: similarity, 0: anti-similarity
-        sample = pd.DataFrame.from_records(data=[data['data']])  # userdata
+        localData = data['data']
+
+        ethnicitiesColums = {
+            'ethnicities_indian': 0,
+            'ethnicities_native_american': 0,
+            'ethnicities_middle_eastern': 0,
+            'ethnicities_asian': 0,
+            'ethnicities_white': 0,
+            'ethnicities_black': 0,
+            'ethnicities_other': 0,
+            'ethnicities_pacific_islander': 0,
+            'ethnicities_hispanic_/_latin': 0,
+        }
+
+        ethnicitiesMapper = {
+            'indian': 'ethnicities_indian',
+            'native american': 'ethnicities_native_american',
+            'middle eastern': 'ethnicities_middle_eastern',
+            'asian': 'ethnicities_asian',
+            'white': 'ethnicities_white',
+            'black': 'ethnicities_black',
+            'other': 'ethnicities_other',
+            'pacific islander': 'ethnicities_pacific_islander',
+            'hispanic / latin': 'ethnicities_hispanic_/_latin',
+        }
+
+        for ethicity in localData['ethnicities']:
+            ethnicitiesColums[ethnicitiesMapper[ethicity]] = 1
+
+        speaksColums = {
+            'speaks_english': 0,
+            'speaks_spanish': 0,
+            'speaks_french': 0,
+            'speaks_c++': 0,
+            'speaks_chinese': 0,
+            'speaks_japanese': 0,
+            'speaks_german': 0,
+            'speaks_italian': 0,
+        }
+
+        speaksMapper = {
+            'english': 'speaks_english',
+            'spanish': 'speaks_spanish',
+            'french': 'speaks_french',
+            'c++': 'speaks_c++',
+            'chinese': 'speaks_chinese',
+            'japanese': 'speaks_japanese',
+            'german': 'speaks_german',
+            'italian': 'speaks_italian'
+        }
+        for language in localData['speaks']:
+            if language == "english, but in canadian":
+                language = "english"
+            speaksColums[speaksMapper[language]] = 1
+
+        for key, value in ethnicitiesColums.items():
+            localData[key] = value
+        for key, value in speaksColums.items():
+            localData[key] = value
+        localData.pop('speaks')
+        localData.pop('ethnicities')
+        sample = pd.DataFrame.from_records(data=[localData])
 
         # DB DATA
         with sqlite3.connect('okcupid.sqlite') as conn:
@@ -779,7 +965,112 @@ def std():
     if request.method == 'POST':
         # USER DATA
         data = request.json
-        sample = pd.DataFrame.from_records(data=[data['data']])  # userdata
+        localData = data['data']
+
+        ethnicitiesColums = {
+            'ethnicities_indian': 0,
+            'ethnicities_native_american': 0,
+            'ethnicities_middle_eastern': 0,
+            'ethnicities_asian': 0,
+            'ethnicities_white': 0,
+            'ethnicities_black': 0,
+            'ethnicities_other': 0,
+            'ethnicities_pacific_islander': 0,
+            'ethnicities_hispanic_/_latin': 0,
+        }
+
+        ethnicitiesMapper = {
+            'indian': 'ethnicities_indian',
+            'native american': 'ethnicities_native_american',
+            'middle eastern': 'ethnicities_middle_eastern',
+            'asian': 'ethnicities_asian',
+            'white': 'ethnicities_white',
+            'black': 'ethnicities_black',
+            'other': 'ethnicities_other',
+            'pacific islander': 'ethnicities_pacific_islander',
+            'hispanic / latin': 'ethnicities_hispanic_/_latin',
+        }
+
+        for ethicity in localData['ethnicities']:
+            ethnicitiesColums[ethnicitiesMapper[ethicity]] = 1
+
+        speaksColums = {
+            'speaks_english': 0,
+            'speaks_spanish': 0,
+            'speaks_french': 0,
+            'speaks_c++': 0,
+            'speaks_chinese': 0,
+            'speaks_japanese': 0,
+            'speaks_german': 0,
+            'speaks_italian': 0,
+        }
+
+        speaksMapper = {
+            'english': 'speaks_english',
+            'spanish': 'speaks_spanish',
+            'french': 'speaks_french',
+            'c++': 'speaks_c++',
+            'chinese': 'speaks_chinese',
+            'japanese': 'speaks_japanese',
+            'german': 'speaks_german',
+            'italian': 'speaks_italian'
+        }
+        for language in localData['speaks']:
+            if language == "english, but in canadian":
+                language = "english"
+            speaksColums[speaksMapper[language]] = 1
+
+        for key, value in ethnicitiesColums.items():
+            localData[key] = value
+        for key, value in speaksColums.items():
+            localData[key] = value
+        localData.pop('speaks')
+        localData.pop('ethnicities')
+        sample = pd.DataFrame.from_records(data=[localData])
+
+        # DB DATA
+        with sqlite3.connect('okcupid.sqlite') as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM okcupid_clean')
+            clean = cursor.fetchall()
+            col_names_clean = [description[0]
+                               for description in cursor.description]
+
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM okcupid_std')
+            std = cursor.fetchall()
+
+            # col names
+            col_names_std = [description[0]
+                             for description in cursor.description]
+
+        # df conversion
+        df_clean = pd.DataFrame(clean, columns=col_names_clean)
+        # df_std = pd.DataFrame(std, columns=col_names_std) # TESTING ONLY
+
+        # print(df_clean) # [842 rows x 89 columns] with index
+        # print(sample) # [1 rows x 88 columns], no index
+        # print(len(col_names_clean)) # [89] with index
+        # print(len(col_names_std)) # [89] with index
+
+        # MAPPER
+        global continuous_cols, categorical_cols, ethnities_cols, speaks_cols
+        global mapper
+
+        # HANDLE INPUT
+        std = np.round(mapper.transform(sample), 2)
+
+        return json.dumps(std.to_dict(orient='records'), indent=2)
+
+
+@app.route('/api/post/user/std/radar', methods=['POST'])
+@cross_origin()
+def stdUserRadar():
+    if request.method == 'POST':
+        # USER DATA
+        data = request.json
+        localData = data['data']
+        sample = pd.DataFrame.from_records(data=[localData])
 
         # DB DATA
         with sqlite3.connect('okcupid.sqlite') as conn:
